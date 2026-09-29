@@ -22,7 +22,7 @@ class Bot(commands.Bot):
         await self.change_presence(
             activity=discord.Activity(
                 name="Running...",
-                type=discord.ActivityType.playing,
+                type=discord.ActivityType.competing,
             ),
         )
 

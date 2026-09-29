@@ -17,20 +17,53 @@ class McCog(commands.Cog):
         print(__name__)
 
     @app_commands.command()
-    async def mc_boot(self, interaction: discord.Interaction) -> None:
+    async def mc_boot(self, interaction: discord.Interaction):
         await interaction.response.send_message("booting...")
 
-        with await interaction.channel.typing():  # type: ignore
-            match await cli.mc.boot():
-                case Result.AlreadyBoot:
-                    embed = discord.Embed(
-                        colour=discord.Colour.red(),
-                        title="Failed to boot the server",
-                        description="it's already running.",
-                    )
-                    await interaction.edit_original_response(embed=embed)
-                case _:  # Ok
-                    pass
+        match await cli.mc.boot():
+            case Result.AlreadyBoot:
+                embed = discord.Embed(
+                    colour=discord.Colour.red(),
+                    title="Failed to boot the server",
+                    description="it's already running.",
+                )
+                return await interaction.edit_original_response(embed=embed)
+            case _:  # Ok
+                pass
+
+        await interaction.edit_original_response(content="success!")
+
+    @app_commands.command()
+    async def mc_reboot(self, interaction: discord.Interaction):
+        await interaction.response.send_message("rebooting...")
+
+        match await cli.mc.reboot():
+            case Result.NotBoot:
+                embed = discord.Embed(
+                    colour=discord.Colour.red(),
+                    title="Failed to reboot the server",
+                    description="it's not booting.",
+                )
+                return await interaction.edit_original_response(embed=embed)
+            case _:  # Ok
+                pass
+
+        await interaction.edit_original_response(content="success!")
+
+    @app_commands.command()
+    async def mc_shutdown(self, interaction: discord.Interaction):
+        await interaction.response.send_message("rebooting...")
+
+        match await cli.mc.reboot():
+            case Result.NotBoot:
+                embed = discord.Embed(
+                    colour=discord.Colour.red(),
+                    title="Failed to shutdown the server",
+                    description="it's not booting.",
+                )
+                return await interaction.edit_original_response(embed=embed)
+            case _:  # Ok
+                pass
 
         await interaction.edit_original_response(content="success!")
 

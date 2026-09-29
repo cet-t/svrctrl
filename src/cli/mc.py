@@ -17,14 +17,25 @@ async def boot() -> Result:
 
     await asyncio.sleep(3)
     print("boot")
+
     return Result.Ok
 
 
-async def reboot():
+async def reboot() -> Result:
+    if not is_running():
+        return Result.NotBoot
+
     await asyncio.sleep(3)
     print("reboot")
 
+    return Result.Ok
+
 
 async def shutdown():
+    if not is_running():
+        return Result.NotBoot
+
     await asyncio.sleep(3)
     print("shutdown")
+
+    return Result.Ok
